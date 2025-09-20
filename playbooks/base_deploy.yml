@@ -1,5 +1,54 @@
+- name: Prepare SSH key from vault
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - group_vars/all/vault_private_keys.yml
+  tasks:
+
+    - name: debug
+      ansible.builtin.debug:
+        var: groups
+    
+    - name: Create temp file for SSH key
+      ansible.builtin.tempfile:
+        state: file
+        suffix: _ed25519
+      register: tmpkey
+
+    - name: Write private key (0600, normalize line endings)
+      ansible.builtin.copy:
+        dest: "{{ tmpkey.path }}"
+        content: "{{ deployment_private_keys.default
+                    | regex_replace('\r\n', '\n')
+                    | regex_replace('\r', '\n') }}"
+        mode: '0600'
+      no_log: true
+
+    - name: Assign key file to inventory hosts dynamically
+      ansible.builtin.add_host:
+        name: "{{ item }}"
+        groups: prepared_targets
+        ansible_ssh_private_key_file: "{{ tmpkey.path }}"
+      loop: "{{ groups['dev'] | default([]) }}"
+
+    - name: Share temp key path for cleanup
+      ansible.builtin.set_fact:
+        _vault_tmpkey_path: "{{ tmpkey.path }}"
+        cacheable: false
+
 - name: base_deploy
   hosts: dev
+  remote_user: root
   become: true
   gather_facts: true
-  
+  tasks:
+    - ansible.builtin.command: "uname -a"
+
+- name: Cleanup temp key
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Remove temp key file
+      ansible.builtin.file:
+        path: "{{ hostvars['localhost']['_vault_tmpkey_path'] | default(omit) }}"
+        state: absent  
