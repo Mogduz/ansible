@@ -1,0 +1,64 @@
+all:
+  hosts:
+    multi01.leikam-barz.de:
+      ansible_host: 159.69.57.185
+      ansible_host_internal: 10.0.1.2
+    cloud.leikam-barz.de:
+      ansible_host: 188.245.82.216
+      ansible_host_internal: 10.0.0.3
+    mail.leikam-barz.de:
+      ansible_host: 91.99.0.194
+      ansible_host_internal: 10.0.0.2
+    palworld.leikam-barz.de:
+      ansible_host: 159.69.57.185
+      ansible_host_internal: 10.0.1.2
+    satisfactory.leikam-barz.de:
+      ansible_host: 159.69.57.185
+      ansible_host_internal: 10.0.1.2
+
+    glusterfs.leikam-barz.de:
+      ansible_host: 91.98.141.5
+      ansible_host_internal: 10.1.0.3
+    glusterclient.leikam-barz.de:
+      ansible_host: 91.99.226.222
+      ansible_host_internal: 10.1.0.2
+
+    imagebuilder.leikam-barz.de:
+      ansible_host: 91.98.128.105
+      ansible_host_internal: 10.1.0.4
+
+    testhost.leikam-barz.de:
+      ansible_host: 91.99.14.57
+
+
+dev:
+  hosts:
+    testhost.leikam-barz.de:
+
+storage:
+  hosts:
+    multi01.leikam-barz.de:
+
+deployment:
+  hosts:
+    multi01.leikam-barz.de:
+    cloud.leikam-barz.de:
+    mail.leikam-barz.de:
+    palworld.leikam-barz.de:
+    satisfactory.leikam-barz.de:
+    
+docker:
+  hosts:
+    multi01.leikam-barz.de:
+    cloud.leikam-barz.de:
+    mail.leikam-barz.de:
+
+testing:
+  hosts:
+    glusterfs.leikam-barz.de:
+    glusterclient.leikam-barz.de:
+    imagebuilder.leikam-barz.de:
+
+docker_image_builder:
+  hosts:
+    imagebuilder.leikam-barz.de:
